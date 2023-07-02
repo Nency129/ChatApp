@@ -1,0 +1,5 @@
+.App{
+    min-height:100vh;
+    display:flex;
+    background-color: hsl(279, 52%, 94%);
+}
