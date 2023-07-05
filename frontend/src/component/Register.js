@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const Register = () => {
   const [input, setInput] = useState({
@@ -6,28 +7,118 @@ const Register = () => {
     email: "",
     password: "",
     cpassword: "",
-    pic:"",
   });
+  const [loading, setLoading] = useState(false);
+  const [pic, setPic] = useState();
+
+  useEffect(() => {
+    console.log(input, pic);
+  }, [input, pic]);
+
+  const InputHandler = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    // console.log(name, value)
+    setInput({
+      ...input,
+      [name]: value,
+    });
+  };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    const user = {
+      name: input.username,
+      email: input.email,
+      password: input.password,
+    };
+    setLoading(true);
+    if (input.password !== input.cpassword) {
+      alert("password dosen't match");
+      return;
+    }
+
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/user/",
+        { ...user, pic },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Headers": "*",
+          },
+        }
+      );
+      console.log(res.data);
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("chitchatuser",JSON.stringify(user));
+      console.log(res.data.token);
+    } catch (error) {
+      console.log("error form content", error);
+    }
+    setInput({
+      username: "",
+      email: "",
+      password: "",
+      cpassword:"",
+    });
+  };
+
+  const postDetails = (pics) => {
+    setLoading(true);
+    if (pics === undefined) {
+      alert("please select an Image");
+      return;
+    }
+
+    if (pics.type === "image/jpeg" || pics.type === "image/png") {
+      const data = new FormData();
+      data.append("file", pics);
+      data.append("upload_preset", "chitchat");
+      data.append("cloud_name", "blackfox");
+      console.log(data);
+      fetch("https://api.cloudinary.com/v1_1/blackfox/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setPic(data.url.toString());
+          console.log(data.url.toString());
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+        });
+    } else {
+      alert("please select an image");
+      setLoading(false);
+      return;
+    }
+  };
+
   return (
     <div>
       {/* fields */}
-      <form>
+      <form onSubmit={submitHandler}>
         <input
-          name="Username"
+          name="username"
           className="w-full px-4 py-2 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
           type="text"
           placeholder="Username"
-          //   value={input.username}
-          //   onChange={InputHandler}
+          value={input.username}
+          onChange={InputHandler}
           required
         />
         <input
-          name="Email"
+          name="email"
           className="w-full px-4 py-2 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
           type="email"
           placeholder="Email"
-          //   value={input.username}
-          //   onChange={InputHandler}
+          value={input.email}
+          onChange={InputHandler}
           required
         />
         <input
@@ -35,8 +126,8 @@ const Register = () => {
           className="w-full px-4 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
           type="password"
           placeholder="Password"
-          //   value={input.password}
-          //   onChange={InputHandler}
+          value={input.password}
+          onChange={InputHandler}
           required
         />
         <input
@@ -44,12 +135,12 @@ const Register = () => {
           className="w-full px-4 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
           type="password"
           placeholder="Confirm Password"
-          //   value={input.password}
-          //   onChange={InputHandler}
+          value={input.cpassword}
+          onChange={InputHandler}
           required
         />
-        <label class="block">
-          <span class="sr-only">Choose profile photo</span>
+        <label className="block">
+          <span className="sr-only">Choose profile photo</span>
           <input
             type="file"
             className=" mt-5 block w-full text-sm text-slate-500
@@ -57,6 +148,10 @@ const Register = () => {
                     file:rounded-full file:border-0
                     file:text-sm file:font-semibold
                     file:bg-slate-800 file:text-slate-200"
+            onChange={(e) => {
+              postDetails(e.target.files[0]);
+              // loading={loading}
+            }}
           />
         </label>
         <button className="w-full bg-red-400 rounded-2xl px-8 py-2 mt-5 mb-2">

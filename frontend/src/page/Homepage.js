@@ -1,48 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import Register from "../component/Register";
 import logo from "../assets/logo.png";
 import Login from "../component/Login";
 
 const Homepage = () => {
-  const onClickLogin = () => {
-    <div>
-      console.log("In");
-      <login />
-      <div className="hidden">
-        <Register />
-      </div>
-    </div>;
-  };
+  const [login, setLogin] = useState(false)
 
-  const onClickRegister = () => {
-    <div>
-      <Register />
-      <div className="hidden">
-        <Login />
-      </div>
-    </div>;
-  };
+  
   return (
     <div className="mx-auto my-20">
       <div className="border-black border-2 p-4 bg-black text-slate-200 rounded-2xl w-80">
-        <img src={logo} className="h-12 w-12 mx-auto" />
+        <img src={logo} className="h-14 w-14 mx-auto" />
         <div className="grid grid-cols-2 gap-2 mt-5">
           <div>
-            <button className="bg-slate-800 px-8 py-2 w-full rounded-2xl" onClick={onClickRegister}>
+            <button className="bg-slate-800 px-8 py-2 w-full rounded-2xl" onClick={() => setLogin(!login)}>
               Signup
             </button>
           </div>
           <div>
             <button
               className="bg-slate-800 px-8 py-2 w-full rounded-2xl"
-              onClick={onClickLogin}
+              onClick={() => setLogin(!login)}
             >
               Login
             </button>
           </div>
         </div>
 
-        <Register />
+        {login ? <Register /> : <Login/>}
       </div>
     </div>
   );

@@ -2,16 +2,20 @@ const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
+const cors = require("cors");
+
 
 dotenv.config();
 connectDB();
 const app = express();
+app.use(cors({ origin: true }));
 
 // middleware
 app.use(express.json());
 // if the path is unknown 
 app.use((req, res, next) => {
   console.log(req.path, req.method);
+  res.setHeader('Access-Control-Allow-Origin', '*');
   next();
 });
 
