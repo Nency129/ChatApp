@@ -1,19 +1,25 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
-
+const userRoutes = require("./routes/userRoutes");
 
 dotenv.config();
 connectDB();
 const app = express();
 
+// middleware
+app.use(express.json());
+// if the path is unknown 
+app.use((req, res, next) => {
+  console.log(req.path, req.method);
+  next();
+});
 
-app.get('/',(req,res)=>{
-    res.send("Api is working");
-})
+// Routes
+app.use("/api/user", userRoutes);
 
-const PORT=process.env.PORT || 5000;
-// console.log(PORT);
-app.listen(PORT,()=>{
-    console.log("server started");
+// Connection to server
+const PORT = 5000;
+app.listen(PORT, () => {
+  console.log("server started");
 });
