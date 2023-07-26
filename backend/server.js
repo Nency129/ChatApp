@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
 const cors = require("cors");
+const chatRoutes =require("./routes/chatRoutes");
 
 
 dotenv.config();
@@ -21,6 +22,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use("/api/user", userRoutes);
+app.use("/api/chat",chatRoutes);
 
 // Connection to server
 const PORT = 5000;

@@ -1,5 +1,6 @@
 import "./App.css";
 import {BrowserRouter,Route,Routes} from "react-router-dom";
+import styles from "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import Homepage from "./page/Homepage";
 import ChatPage from "./page/ChatPage";
 
