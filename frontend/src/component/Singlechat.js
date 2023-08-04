@@ -4,17 +4,13 @@ import {MessageInput,Message,MessageSeparator,ChatContainer,ConversationHeader,V
 function Singlechat() {
   return (
     <div>
-      <div
-        style={{
-          height: "500px",
-        }}
-      >
+      <div style={{  height: "650px" }}>
         <ChatContainer>
           <ConversationHeader>
             {/* <Avatar src={emilyIco} name="Emily" /> */}
             <ConversationHeader.Content
               userName="Emily"
-              info="Active 10 mins ago"
+              info="Active 12 mins ago"
             />
             <ConversationHeader.Actions>
               <VoiceCallButton />
@@ -26,7 +22,6 @@ function Singlechat() {
             typingIndicator={<TypingIndicator content="Emily is typing" />}
           >
             <MessageSeparator content="Saturday, 30 November 2019" />
-
             <Message
               model={{
                 message: "Hello my friend",
@@ -42,7 +37,7 @@ function Singlechat() {
                 message: "Hello my friend",
                 sentTime: "15 mins ago",
                 sender: "Emily",
-                direction: "incoming",
+                direction: "outgoing",
                 position: "last",
               }}
             >

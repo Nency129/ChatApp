@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const Chat = require("./chatModel");
 
 const messageModel = mongoose.Schema(
   {
@@ -8,7 +7,7 @@ const messageModel = mongoose.Schema(
       ref: "User",
     },
     content: { type: String, trim: true },
-    Chat: {
+    chat: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "chat",
     },

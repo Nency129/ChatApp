@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 
 const Login = () => {
@@ -17,6 +18,7 @@ const Login = () => {
       [name]: value,
     });
   };
+  const navigate = useNavigate()
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -41,6 +43,7 @@ const Login = () => {
       console.log(res.data);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("chitchatuser",JSON.stringify(user));
+      navigate('/chats')
       console.log(res.data.token);
     } catch (error) {
       console.log("error form content", error);

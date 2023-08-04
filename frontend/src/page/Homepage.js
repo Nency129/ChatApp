@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Register from "../component/Register";
 import logo from "../assets/logo.png";
 import Login from "../component/Login";
 
 const Homepage = () => {
   const [login, setLogin] = useState(false)
-
-  
   return (
     <div className="mx-auto my-20">
       <div className="border-black border-2 p-4 bg-black text-slate-200 rounded-2xl w-80">

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [input, setInput] = useState({
@@ -10,6 +11,7 @@ const Register = () => {
   });
   const [loading, setLoading] = useState(false);
   const [pic, setPic] = useState();
+  const navigate = useNavigate()
 
   useEffect(() => {
     console.log(input, pic);
@@ -53,6 +55,7 @@ const Register = () => {
       console.log(res.data);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("chitchatuser",JSON.stringify(user));
+      navigate('/chats')
       console.log(res.data.token);
     } catch (error) {
       console.log("error form content", error);
