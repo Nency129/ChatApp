@@ -3,15 +3,54 @@ import { ConversationList, Conversation, Avatar } from "@chatscope/chat-ui-kit-r
 import logo from "../assets/logo.png";
 import axios from "axios";
 import Skeleton from "react-loading-skeleton";
-// import { chatcontext } from "../Context/ChatProvider";
+import Modal from 'react-modal';
 
 function ChatList() {
   const [search, setSearch] = useState(null);
   const [searchResult, setSearchResult] = useState([]);
   const [Result, setResult] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); 
+  const [modal,setModal]=useState(false); 
+  const[groupChatName,SetGroupChatName]=useState();
+  const[selectedUsers,setSelectedUser]=useState([]);
+  const[chatsearch,setChatsearch]=useState();
+  const[chatsearchResult,setChatsearchResult]=useState();
+  const[chatLoading,setChatLoading]=useState(false);
 
-  // const { user } = useContext(chatcontext);
+  const { user,chats } = useContext(chatContext);
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+    },
+  };
+
+  
+  useEffect(()=>{
+    const func=async()=>{
+      const config = {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      };
+      const res=await axios.get(`http://localhost:5000/api/chat`,config); 
+      // console.log(res.data,'result');
+      setResult(res.data);
+    }   
+    func();
+  },[]);
+
+  useEffect(() => {
+    if(search===""){
+      setSearchResult([]);
+    }
+    // else{
+    //   handleSearch();
+    // }
+  }, [search]);
+
 
   const handleSearch = async () => {
     if (!search) {
@@ -24,29 +63,27 @@ function ChatList() {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-      };
-
-      const res=await axios.get(`http://localhost:5000/api/chat`,config); 
-      console.log(res,'result');
+      };   
 
       const  data  = await axios.get(`http://localhost:5000/api/user?search=${search}`, config);
-      // console.log(data.data)
-      // setSearch('')
       setLoading(false);
       setSearchResult([...data.data]);
     } catch (error) {
+      
       alert("Failed to Load the Search Results");
     }
   };
 
-  useEffect(() => {
-    if(search===""){
-      setSearchResult([]);
-    }else{
-      handleSearch();
-    }
-  }, [search])
+  const grouphandle=async()=>{
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${ localStorage.getItem('token')}`,
+    //   },    
+      alert("clicked");
+    // const data=await axios.post("http://localhost:5000/api/chat/group",config);
+  };
 
+  
   // console.log(search, loading, 'search')
   return (
     <>
@@ -90,7 +127,12 @@ function ChatList() {
               </div>
             </div>
           </div>
-          <button>Group</button>
+          <button onClick={()=>setModal(true)}>Group</button>
+          <Modal isOpen={modal} onRequestClose={()=>setModal(false)} style={customStyles}>
+    
+            
+            <button onClick={()=>{setModal(false)}}>close</button>
+          </Modal>
         </div>
         {/* chatList */}
         <ConversationList className="bg-white">
@@ -99,26 +141,25 @@ function ChatList() {
               return <Conversation
               name={convo.name}
               lastSenderName={convo.name}
-              info="Yes i can do it for you"
+              info="Yes i can do it"
             >
-              {/* // <Avatar src={lillyIco} name="Lilly" /> */}
+               <Avatar src={convo.pic} name={convo.name} />
             </Conversation>
             }):
-            // : Result.map((con,i)=>{
-            //   return <Conversation
-            //   name={con.name}
-            //   lastSenderName={con.name}
-            //   info="Yes i can do it for you"
-            // >
-            //  <Avatar src={con.pic} name={con.name} />
-            // </Conversation>
-            // })
-            Result
+             Result.map((con,i)=>{
+              return <Conversation
+              name={con.chatName === 'sender' ? con.users[1].name : con.chatName}
+              lastSenderName={con.name}
+              info="Yes i can do it"
+            >
+             <Avatar src={con.chatName === 'sender' ? con.users[1].pic : con.pic} name={con.name} />
+            </Conversation>
+            })
             }
         </ConversationList>
       </div>
     </>
   );
-}
 
+}
 export default ChatList;
