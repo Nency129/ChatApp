@@ -48,16 +48,15 @@ const accessChat = async (req, res) => {
   }
 };
 
-// all the chats
+
 const fetchChat = async (req, res) => {
   try {
     Chat.find({ users: { $elemMatch: { $eq: res.user._id } } })
       .populate("users", "-password")
       .populate("groupAdmin", "-password")
       .populate("latestMessage")
-      .sort({ updateAt: -1 })
+      .sort({ updatedAt: -1 })
       .then(async (results) => {
-        console.log(results);
         results = await User.populate(results, {
           path: "latestMessage.sender",
           select: "name pic email",
@@ -67,6 +66,7 @@ const fetchChat = async (req, res) => {
   } catch (error) {
     res.status(400);
     throw new Error(error.message);
+
   }
 };
 
@@ -91,14 +91,15 @@ const createGroupChat = async (req, res) => {
       users: users,
       isGroupChat: true,
       groupAdmin: res.user,
+      pic:req.body.pic,
     });
 
-    console.log(groupChat);
+    // console.log(groupChat);
     const fullGroupChat = await Chat.findOne({ _id: groupChat._id })
       .populate("users", "-password")
       .populate("groupAdmin", "-password");
     res.status(200).json(fullGroupChat);
-    console.log(fullGroupChat);
+    // console.log(fullGroupChat);
   } catch (error) {
     res.status(400);
     throw new Error(error.message);

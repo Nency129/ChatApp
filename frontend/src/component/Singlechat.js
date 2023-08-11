@@ -1,7 +1,26 @@
 import React from "react";
 import {MessageInput,Message,MessageSeparator,ChatContainer,ConversationHeader,VoiceCallButton,VideoCallButton,InfoButton,MessageList,TypingIndicator} from "@chatscope/chat-ui-kit-react";
+import axios from "axios";
 
 function Singlechat() {
+  const [newMessage, setnewMessage] = useState();
+  const sendMessage=async(event)=>{
+    if(event.key=="Enter" && newMessage){
+      try {
+        const config = {
+          headers: {
+            "context-type":"application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        };
+
+        const data=await axios.post('http://localhost:5000/api/message',config);
+        
+      } catch (error) {
+        
+      }
+    }
+  }
   return (
     <div>
       <div style={{  height: "650px" }}>
@@ -44,7 +63,7 @@ function Singlechat() {
               {/* <Avatar src={emilyIco} name={"Emily"} /> */}
             </Message>
           </MessageList>
-          <MessageInput placeholder="Type message here" />
+          <MessageInput placeholder="Type message here" onKeyDown={sendMessage}/>
         </ChatContainer>
       </div>
     </div>

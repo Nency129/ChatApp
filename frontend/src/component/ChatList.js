@@ -1,33 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { ConversationList, Conversation, Avatar } from "@chatscope/chat-ui-kit-react";
 import logo from "../assets/logo.png";
 import axios from "axios";
 import Skeleton from "react-loading-skeleton";
-import Modal from 'react-modal';
 
-function ChatList() {
+function ChatList({open,setOpen}) {
   const [search, setSearch] = useState(null);
   const [searchResult, setSearchResult] = useState([]);
   const [Result, setResult] = useState([]);
   const [loading, setLoading] = useState(false); 
-  const [modal,setModal]=useState(false); 
-  const[groupChatName,SetGroupChatName]=useState();
-  const[selectedUsers,setSelectedUser]=useState([]);
-  const[chatsearch,setChatsearch]=useState();
-  const[chatsearchResult,setChatsearchResult]=useState();
-  const[chatLoading,setChatLoading]=useState(false);
-
-  const { user,chats } = useContext(chatContext);
-  const customStyles = {
-    content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-    },
-  };
-
-  
+  // const [modal,setModal]=useState(false); 
+ 
   useEffect(()=>{
     const func=async()=>{
       const config = {
@@ -36,7 +19,6 @@ function ChatList() {
         },
       };
       const res=await axios.get(`http://localhost:5000/api/chat`,config); 
-      // console.log(res.data,'result');
       setResult(res.data);
     }   
     func();
@@ -82,9 +64,6 @@ function ChatList() {
       alert("clicked");
     // const data=await axios.post("http://localhost:5000/api/chat/group",config);
   };
-
-  
-  // console.log(search, loading, 'search')
   return (
     <>
       <div className="h-full">
@@ -127,16 +106,21 @@ function ChatList() {
               </div>
             </div>
           </div>
-          <button onClick={()=>setModal(true)}>Group</button>
-          <Modal isOpen={modal} onRequestClose={()=>setModal(false)} style={customStyles}>
-    
-            
-            <button onClick={()=>{setModal(false)}}>close</button>
-          </Modal>
+          <button onClick={()=>setOpen(true)}>Group</button>
+          {/* create group chat */}
+          {/* <Modal isOpen={modal} onRequestClose={()=>setModal(false)} style={customStyles}>
+            <div >
+              <span className="mb-24 text-lg ">Create Group Chat</span>
+              <input type="text" placeholder="Chat Name" className="border rounded-lg p-1 mb-2 w-full"/>
+              <input type="text" placeholder="User" className="border rounded-lg p-1 mb-2 w-full"/>
+              <button onClick={()=>{setModal(false)}} className="border bg-black text-white p-2 rounded-lg">Create Chat</button>
+            </div>
+          </Modal> */}
+          
         </div>
         {/* chatList */}
         <ConversationList className="bg-white">
-            {loading?<Skeleton count={7}/>: 
+            {loading?<Skeleton count={7} style={{height:"40px"}}/>: 
             searchResult.length && search ? searchResult.map((convo, i) => {
               return <Conversation
               name={convo.name}

@@ -25,17 +25,14 @@ const sendMessage = async (req, res) => {
     // The `.populate()` method should be used after creating the message object and before saving it. You cannot use it on a message that has already been saved.
     // Also, make sure you populate the 'sender' field with the correct User model path.
     message = await message.populate("sender", "name pic");
-console.log(message)
     // Assuming 'Chat' is a valid model, you can populate it similarly to the 'sender'.
     message = await message.populate("chat");
-    console.log(message)
 
     // If you want to populate 'users' field inside the 'Chat' model, use the following:
     message = await message.populate({
       path: "chat.users",
       select: "name pic email",
     });
-    console.log(message)
 
     // It's recommended to use 'const' instead of 'var' for better scoping.
     await Chat.findByIdAndUpdate(chatId, { latestMessage: message });
