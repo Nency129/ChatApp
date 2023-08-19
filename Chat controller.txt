@@ -1,0 +1,3 @@
+Chat controller
+fetchChat is for fetching all chats that contians particular user
+accessChat is to create chatroom with other users

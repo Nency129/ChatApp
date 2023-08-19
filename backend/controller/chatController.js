@@ -1,3 +1,4 @@
+const e = require("express");
 const Chat = require("../Models/chatModel");
 const User = require("../Models/userModel");
 
@@ -5,29 +6,36 @@ const accessChat = async (req, res) => {
   //   console.log(res.user._id);
   const { userId } = req.body;
 
+
   if (!userId) {
     console.log("UserId param not sent with request");
     return res.sendStatus(400);
   }
-
-  var isChat = await Chat.find({
-    isgroupChat: false,
+  if(res.user._id===userId){
+    res.status(400);
+    throw new error("cant create self chat");
+  }
+  var isChat = await Chat.findOne({
+    isGroupChat: false,
     $and: [
-      { users: { $elemMatch: { $eq: res.user._id } } },
+      { users: { $elemMatch: { $eq: res.user._id} } },
       { users: { $elemMatch: { $eq: userId } } },
     ],
   })
     .populate("users", "-password")
     .populate("latestMessage");
-
+    console.log(isChat,"exist")
   isChat = await User.populate(isChat, {
     path: "latestMessage.sender",
     select: "name pic email",
   });
+  console.log(isChat,"after array")
 
-  if (isChat.length > 0) {
-    res.send(isChat[0]);
+  if (isChat) {
+    res.send(isChat);
+    console.log("if")
   } else {
+    console.log("else")
     var chatData = {
       chatName: "sender",
       isGroupChat: false,
@@ -173,4 +181,18 @@ const renameFromGroup = async (req, res) => {
     res.json(remove);
   }
 }
-module.exports = { accessChat, fetchChat, createGroupChat, renameGroup,addToGroup,renameFromGroup };
+
+
+const fetchUser= async(req,res)=>{
+  try {
+    console.log(req.params)
+    let user=await Chat.find({_id:req.params.chatId})
+    .populate("users","_id name email pic")
+    res.json(user);
+  } catch (error) {
+    alert("error");
+    console.log(error)
+  }
+}
+
+module.exports = { accessChat, fetchChat, createGroupChat, renameGroup,addToGroup,renameFromGroup,fetchUser};

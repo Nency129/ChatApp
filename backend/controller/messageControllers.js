@@ -47,11 +47,11 @@ const sendMessage = async (req, res) => {
 
 const allMessage = async(req,res)=>{
   try {
-    console.log(req.params);
-    const messages=await Message.find({chat:req.params.chatId})
-    .populate("sender", "name pic")
-    .populate("chat");
-console.log(messages)
+    // console.log(req.params);
+    const messages=await Message.find({_id:req.params.chatId})
+    // .populate("sender", "name pic email")
+    // .populate("chat");
+    console.log(messages)
     res.json(messages);
   } catch (error) {
     console.log(error);

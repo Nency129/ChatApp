@@ -7,7 +7,7 @@ function UserBadge({ setSelectedUser, selectedUsers, convo }) {
     setSelectedUser(selectedUsers.filter((sel) => sel._id !== delUser));
   };
   return (
-    <div className="flex">
+    <div className="flex mb-2">
       <div className="bg-gray-700 border rounded-lg flex justify-between px-2">
         <div className="text-white">{convo.name}</div>
         <FontAwesomeIcon

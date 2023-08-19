@@ -1,6 +1,12 @@
-.App{
-    min-height:100vh;
-    display:flex;
-    align-items: center;
-    background-color: hsl(279, 52%, 94%);
+body{
+    min-height:100vh !important;
+    display:flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    background-color: hsl(278, 25%, 81%) !important;
+    overflow: hidden !important;
+    width: 100vw !important;
+    max-height: 100vh !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
 }

@@ -11,7 +11,7 @@ const Register = () => {
   });
   const [loading, setLoading] = useState(false);
   const [pic, setPic] = useState();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log(input, pic);
@@ -54,8 +54,8 @@ const Register = () => {
       );
       console.log(res.data);
       localStorage.setItem("token", res.data.token);
-      localStorage.setItem("chitchatuser",JSON.stringify(user));
-      navigate('/chats')
+      localStorage.setItem("chitchatuser", JSON.stringify(res.data.user));
+      navigate("/chats/0");
       console.log(res.data.token);
     } catch (error) {
       console.log("error form content", error);
@@ -64,7 +64,7 @@ const Register = () => {
       username: "",
       email: "",
       password: "",
-      cpassword:"",
+      cpassword: "",
     });
   };
 
@@ -108,7 +108,7 @@ const Register = () => {
       <form onSubmit={submitHandler}>
         <input
           name="username"
-          className="w-full px-4 py-2 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+          className="w-full px-4 py-2 mt-5 rounded-lg font-medium bg-slate-950 border border-gray-800 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
           type="text"
           placeholder="Username"
           value={input.username}
@@ -117,7 +117,7 @@ const Register = () => {
         />
         <input
           name="email"
-          className="w-full px-4 py-2 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+          className="w-full px-4 py-2 mt-5 rounded-lg font-medium bg-slate-950 border border-gray-800 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
           type="email"
           placeholder="Email"
           value={input.email}
@@ -126,7 +126,7 @@ const Register = () => {
         />
         <input
           name="password"
-          className="w-full px-4 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+          className="w-full px-4 py-2 rounded-lg font-medium bg-slate-950 border border-gray-800 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
           type="password"
           placeholder="Password"
           value={input.password}
@@ -135,7 +135,7 @@ const Register = () => {
         />
         <input
           name="cpassword"
-          className="w-full px-4 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+          className="w-full px-4 py-2 rounded-lg font-medium bg-slate-950 border border-gray-800 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
           type="password"
           placeholder="Confirm Password"
           value={input.cpassword}
@@ -147,10 +147,11 @@ const Register = () => {
           <input
             type="file"
             className=" mt-5 block w-full text-sm text-slate-500
+            file:border-gray-800
                     file:mr-4 file:py-2 file:px-4
                     file:rounded-full file:border-0
                     file:text-sm file:font-semibold
-                    file:bg-slate-800 file:text-slate-200"
+                    file:bg-slate-950 file:text-slate-500"
             onChange={(e) => {
               postDetails(e.target.files[0]);
               // loading={loading}
