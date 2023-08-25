@@ -15,7 +15,7 @@ import { chatcontext } from "../Context/ChatProvider";
 function ChatList({ open, setOpen }) {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
-
+const id = window.location.href.split('/')[4]
   const [loading, setLoading] = useState(false);
   const { result, setResult } = useContext(chatcontext);
 
@@ -30,6 +30,7 @@ function ChatList({ open, setOpen }) {
   }, [search !== ""]);
 
   const handleResult = async (convo) => {
+    console.log("enter")
     try {
       const config = {
         headers: {
@@ -131,7 +132,7 @@ function ChatList({ open, setOpen }) {
             icon={faUserGroup}
             onClick={() => setOpen(true)}
             className="cursor-pointer p-2 rounded-2xl"
-            style={{ backgroundColor: "hsl(7, 80%, 63%)" }}
+            style={{ backgroundColor: "#de97ff" }}
           />
         </div>
         {/* chatList */}
@@ -151,6 +152,7 @@ function ChatList({ open, setOpen }) {
                     onClick={() => {
                       handleResult(convo);
                     }}
+                  
                   >
                     <Avatar src={convo.pic} name={convo.name} />
                   </Conversation>
@@ -174,6 +176,7 @@ function ChatList({ open, setOpen }) {
                         state: { convo: convo },
                       })
                     }
+                    active={convo._id === id ? true : false}
                   >
                     <Avatar
                       src={

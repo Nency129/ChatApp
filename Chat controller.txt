@@ -1,3 +1,7 @@
 Chat controller
 fetchChat is for fetching all chats that contians particular user
 accessChat is to create chatroom with other users
+
+message controller
+sendmessage to send a message 
+allmessage to fetch a message of particular id 

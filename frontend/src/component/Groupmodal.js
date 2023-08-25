@@ -79,7 +79,7 @@ function Groupmodal({ open, setOpen }) {
     setOpen(false);
   };
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex items-center justify-center">
+    <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex items-center justify-center" >
       <div className="bg-slate-900 p-2 rounded-lg w-72 border-gray-800">
         <h1 className="font-semibold text-center text-xl text-white mb-2">
           Create Group Chat
@@ -131,13 +131,13 @@ function Groupmodal({ open, setOpen }) {
           </div>
         <div className="text-center flex justify-between mt-2">
           <button
-            className="px-5 py-2  text-white rounded-lg bg-red-400"
+            className="px-5 py-2  text-white rounded-lg #de97ff" style={{backgroundColor:"#8f2cfc"}}
             onClick={handlecancle}
           >
             Cancle
           </button>
           <button
-            className="px-5 py-2  text-white rounded-lg bg-red-400"
+            className="px-5 py-2  text-white rounded-lg " style={{backgroundColor:"#8f2cfc"}}
             onClick={handlesubmit}
           >
             Create Group

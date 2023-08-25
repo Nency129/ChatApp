@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useParams } from "react-router";
+import React, { useEffect, useState } from "react";
+// import { useParams } from "react-router";
 import { useLocation } from "react-router-dom";
 import {
   MessageInput,
@@ -18,59 +18,91 @@ import axios from "axios";
 
 function Singlechat() {
   const location = useLocation();
-  const User = location.state.convo;
-  console.log(User);
+  const User = location.state?.convo;
+  // console.log(User);
   const [newMessage, setnewMessage] = useState();
   const [messages, setMessages] = useState("");
+  const [selectedChat, SetselectedChat] = useState("");
   const self = JSON.parse(localStorage.getItem("chitchatuser"));
   // const {user,selectedChat,selectedChat}=ChatState();
 
-  // const sendMessage = async (event) => {
-  //   if (event.key == "Enter" && newMessage) {
-  //     try {
-  //       const config = {
-  //         headers: {
-  //           "context-type": "application/json",
-  //           Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //         },
-  //       };
+  useEffect(() => {
+    fetchMessages();
+  }, [User]);
 
-  //       const data = await axios.post(
-  //         "http://localhost:5000/api/message",
-  //         {
-  //           content: newMessage,
-  //           // chatId:selectedChat._id,
-  //         },
-  //         config
-  //       );
+  const fetchMessages = async () => {
+    if (!User) return;
 
-  //       setnewMessage("");
-  //       setMessages([...messages, data.data]);
-  //     } catch (error) {}
-  //   }
-  // };
+    try {
+      const config = {
+        headers: {
+          "context-type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      };
+      const { data } = await axios.get(
+        `http://localhost:5000/api/message/${User._id}`,
+        config
+      );
+      console.log(data);
+      setMessages(data);
+    } catch (error) {
+      alert("failed to load the message");
+    }
+  };
+
+  const sendMessage = async (event) => {
+    // console.log(event);
+    if (event.key === "Enter" && newMessage) {
+      event.preventDefault();
+      // console.log("enter");
+      try {
+        const config = {
+          headers: {
+            "context-type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        };
+        const data = await axios.post(
+          "http://localhost:5000/api/message",
+          {
+            content: newMessage,
+            chatId: User?._id,
+          },
+          config
+        );
+        setnewMessage("");
+        // console.log(data.data);
+        // console.log(User?._id);
+        setMessages([...messages, data.data]);
+      } catch (error) {
+        alert("error occured");
+      }
+    }
+  };
+
   return (
     <div>
-      <div style={{ height: "93vh", overflow: "auto" }}>
+      <div style={{ height: "88vh", overflow: "auto" }}>
         <ChatContainer>
           <ConversationHeader>
             <Avatar
               src={
-                User.chatName === "sender"
-                  ? self._id === User.users[0]._id
-                    ? User.users[1].pic
-                    : User.users[0].pic
-                  : User.pic
+                User?.chatName === "sender"
+                  ? self._id === User?.users[0]._id
+                    ? User?.users[1].pic
+                    : User?.users[0].pic
+                  : User?.pic
               }
-              name={User.name}
+              name={User?.name}
             />
             <ConversationHeader.Content
               userName={
-                User.chatName === "sender"
-                  ? self._id === User.users[0]._id
-                    ? User.users[1].name
-                    : User.users[0].name
-                  : User.chatName
+                User?.chatName === "sender"
+                  ? self._id === User?.users[0]._id
+                    ? User?.users[1].name
+                    : User?.users[0].name
+                  : User?.chatName
               }
               info="Active 12 mins ago"
             />
@@ -95,13 +127,13 @@ function Singlechat() {
             >
               <Avatar
                 src={
-                  User.chatName === "sender"
-                    ? self._id === User.users[0]._id
-                      ? User.users[1].pic
-                      : User.users[0].pic
-                    : User.pic
+                  User?.chatName === "sender"
+                    ? self._id === User?.users[0]._id
+                      ? User?.users[1].pic
+                      : User?.users[0].pic
+                    : User?.pic
                 }
-                name={User.name}
+                name={User?.name}
               />
             </Message>
             <Message
@@ -113,15 +145,27 @@ function Singlechat() {
                 position: "last",
               }}
             >
-              <Avatar src={self.pic} name={User.name} />
+              <Avatar src={self.pic} name={User?.name} />
             </Message>
           </MessageList>
-          <MessageInput
+          {/* <MessageInput
             placeholder="Type message here"
-            // onKeyDown={sendMessage}
-          />
+            onKeyDown={sendMessage}
+            value={newMessage}
+            // onChange={(e) => setnewMessage(e.target.value)}
+          /> */}
         </ChatContainer>
       </div>
+      <form>
+        <input
+          type="text"
+          className="border-2 rounded-lg p-1 mb-2 w-full bg-slate-900 border-gray-800 text-white "
+          placeholder="Type message here"
+          onKeyDown={sendMessage}
+          value={newMessage}
+          onChange={(e) => setnewMessage(e.target.value)}
+        />
+      </form>
     </div>
   );
 }

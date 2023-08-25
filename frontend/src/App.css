@@ -1,12 +1,69 @@
-body{
-    min-height:100vh !important;
-    display:flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    background-color: hsl(278, 25%, 81%) !important;
-    overflow: hidden !important;
-    width: 100vw !important;
-    max-height: 100vh !important;
-    padding-left: 10px !important;
-    padding-right: 10px !important;
+body {
+  min-height: 100vh !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  background-color: #de97ff !important;
+  overflow: hidden !important;
+  width: 100vw !important;
+  max-height: 100vh !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+.cs-conversation.cs-conversation--active {
+  background-color: #de97ff !important;
+  border-radius: 10px !important;
+}
+
+.cs-conversation {
+  background-color: #181828 !important;
+}
+/* #5765F2 chat*/
+/* #0E0E10 */
+/* FED789 yellow extra icons */
+.cs-conversation:hover {
+  background-color: #0e0e10 !important;
+}
+
+.cs-conversation__name,
+.cs-conversation__info {
+  color: white !important;
+}
+
+.cs-conversation-header,
+.cs-conversation-header__content,
+.cs-typing-indicator,
+.cs-message-list__scroll-wrapper {
+  background-color: #0e0e10 !important;
+}
+
+.cs-conversation-header__user-name,
+.cs-conversation-header__info {
+  color: white !important;
+  background-color: #0e0e10 !important;
+}
+
+.cs-message-separator::before,
+.cs-message-separator::after {
+  background-color: grey  !important;
+}
+
+.cs-message-separator {
+  background-color: #0e0e10 !important;
+  color: grey  !important;
+}
+
+.cs-message--outgoing .cs-message__content {
+  background-color: #8f2cfc !important;
+  color: white !important;
+}
+
+.cs-message--incoming .cs-message__content {
+  background-color: #de97ff !important;
+  color: white !important;
+}
+
+.cs-typing-indicator__text,.cs-typing-indicator__dot{
+    color: grey  !important;
 }

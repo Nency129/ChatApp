@@ -1,6 +1,6 @@
-const e = require("express");
 const Chat = require("../Models/chatModel");
 const User = require("../Models/userModel");
+const e = require("express");
 
 const accessChat = async (req, res) => {
   //   console.log(res.user._id);
@@ -59,16 +59,20 @@ const accessChat = async (req, res) => {
 
 const fetchChat = async (req, res) => {
   try {
+    // console.log(res.user._id)
     Chat.find({ users: { $elemMatch: { $eq: res.user._id } } })
       .populate("users", "-password")
       .populate("groupAdmin", "-password")
       .populate("latestMessage")
       .sort({ updatedAt: -1 })
       .then(async (results) => {
+        // console.log(results)
         results = await User.populate(results, {
           path: "latestMessage.sender",
           select: "name pic email",
         });
+
+        // console.log(res2)
         res.status(200).send(results);
       });
   } catch (error) {

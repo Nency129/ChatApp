@@ -108,7 +108,7 @@ const Register = () => {
       <form onSubmit={submitHandler}>
         <input
           name="username"
-          className="w-full px-4 py-2 mt-5 rounded-lg font-medium bg-slate-950 border border-gray-800 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+          className="w-full px-4 py-2 mt-5 rounded-lg font-medium bg-slate-950 border border-gray-800 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-slate-950"
           type="text"
           placeholder="Username"
           value={input.username}
@@ -117,7 +117,7 @@ const Register = () => {
         />
         <input
           name="email"
-          className="w-full px-4 py-2 mt-5 rounded-lg font-medium bg-slate-950 border border-gray-800 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+          className="w-full px-4 py-2 mt-5 rounded-lg font-medium bg-slate-950 border border-gray-800 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-slate-950"
           type="email"
           placeholder="Email"
           value={input.email}
@@ -126,7 +126,7 @@ const Register = () => {
         />
         <input
           name="password"
-          className="w-full px-4 py-2 rounded-lg font-medium bg-slate-950 border border-gray-800 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+          className="w-full px-4 py-2 rounded-lg font-medium bg-slate-950 border border-gray-800 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-slate-950 mt-5"
           type="password"
           placeholder="Password"
           value={input.password}
@@ -135,7 +135,7 @@ const Register = () => {
         />
         <input
           name="cpassword"
-          className="w-full px-4 py-2 rounded-lg font-medium bg-slate-950 border border-gray-800 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+          className="w-full px-4 py-2 rounded-lg font-medium bg-slate-950 border border-gray-800 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-slate-950 mt-5"
           type="password"
           placeholder="Confirm Password"
           value={input.cpassword}
@@ -158,7 +158,7 @@ const Register = () => {
             }}
           />
         </label>
-        <button className="w-full bg-red-400 rounded-2xl px-8 py-2 mt-5 mb-2">
+        <button className="w-full rounded-2xl px-8 py-2 mt-5 mb-2" style={{backgroundColor:"#8f2cfc"}}>
           Register
         </button>
       </form>
