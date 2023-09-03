@@ -6,6 +6,7 @@ const cors = require("cors");
 const chatRoutes = require("./routes/chatRoutes");
 const userRoutes = require("./routes/userRoutes");
 const messageRoutes = require("./routes/messageRoutes");
+const { Server } = require("socket.io");
 
 dotenv.config();
 connectDB();
@@ -28,17 +29,28 @@ app.use("/api/message", messageRoutes);
 
 // Connection to server
 const PORT = 5000;
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log("server started");
 });
 
-const io= require('socket.io')(server,{
-  pingTimeout:60000,
-  cors:{
-    origin:"http://localhost:3000",
-  }
-})
+const io = require("socket.io")(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: "http://localhost:3000",
+  },
+});
 
-io.on("connection",(socket)=>{
-  console.log("connected to socket.io")
-})
+io.on("connection", (socket) => {
+  console.log("connected to socket.io");
+
+  socket.on("setup", (userData) => {
+    console.log(userData._id);
+    socket.join(userData._id);
+    socket.emit("connected");
+  });
+
+  socket.on("join chat", (room) => {
+    socket.join(room);
+    console.log("User Joined room:" + room);
+  });
+});

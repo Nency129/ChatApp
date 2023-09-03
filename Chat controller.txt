@@ -5,3 +5,8 @@ accessChat is to create chatroom with other users
 message controller
 sendmessage to send a message 
 allmessage to fetch a message of particular id 
+
+
+frontend
+singlechat for particular chat 
+chatlist for list of chatsusers that are initiated

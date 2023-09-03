@@ -35,6 +35,7 @@ function App() {
   }
 
   useEffect(() => {
+    console.log(JSON.parse(localStorage.getItem("chitchatuser")),"user");
     setUser(JSON.parse(localStorage.getItem("chitchatuser")));
   }, []);
 
@@ -60,9 +61,6 @@ function App() {
           <Routes>
             <Route exact path="/" element={<Splashpage/>}></Route>
             <Route exact path="/home" element={<Homepage />}></Route>
-            {/* <Route exact path="/chats" element={<PrivateRouter />}>
-              <Route exact path="/chats" element={<ChatPage />}></Route> 
-            </Route> */}
             <Route exact path="/chats/:id" element={<PrivateRouter />}>
               <Route exact path="/chats/:id" element={<ChatPage />}></Route>
             </Route>

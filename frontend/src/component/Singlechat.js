@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext,} from "react";
 // import { useParams } from "react-router";
 import { useLocation } from "react-router-dom";
 import {
@@ -15,20 +15,34 @@ import {
   Avatar,
 } from "@chatscope/chat-ui-kit-react";
 import axios from "axios";
+import io from "socket.io-client";
+import { chatcontext } from "../Context/ChatProvider";
+
 
 function Singlechat() {
   const location = useLocation();
   const User = location.state?.convo;
-  // console.log(User);
   const [newMessage, setnewMessage] = useState();
   const [messages, setMessages] = useState("");
-  const [selectedChat, SetselectedChat] = useState("");
+  const [socketConnected,setsocketConnected]=useState(false);
   const self = JSON.parse(localStorage.getItem("chitchatuser"));
-  // const {user,selectedChat,selectedChat}=ChatState();
+  const { user} = useContext(chatcontext);
+
+
+  // socket.io
+  const ENDPOINT = "http://localhost:5000";
+  var socket,selectedChatComapre;
 
   useEffect(() => {
     fetchMessages();
   }, [User]);
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit("setup",user);
+    socket.on("connection",()=> setsocketConnected(true));
+
+  }, []);
 
   const fetchMessages = async () => {
     if (!User) return;
@@ -46,6 +60,7 @@ function Singlechat() {
       );
       console.log(data);
       setMessages(data);
+      socket.emit('join chat',User._id);
     } catch (error) {
       alert("failed to load the message");
     }
@@ -72,8 +87,8 @@ function Singlechat() {
           config
         );
         setnewMessage("");
-        // console.log(data.data);
-        // console.log(User?._id);
+        console.log(data);
+        console.log(User?._id);
         setMessages([...messages, data.data]);
       } catch (error) {
         alert("error occured");
