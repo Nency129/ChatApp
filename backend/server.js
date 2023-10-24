@@ -29,7 +29,7 @@ app.use("/api/message", messageRoutes);
 
 // Connection to server
 const PORT = 5000;
-const server=app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log("server started");
 });
 
@@ -44,7 +44,7 @@ io.on("connection", (socket) => {
   console.log("connected to socket.io");
 
   socket.on("setup", (userData) => {
-    console.log(userData._id);
+    // console.log(userData._id);
     socket.join(userData._id);
     socket.emit("connected");
   });

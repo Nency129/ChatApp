@@ -35,7 +35,6 @@ function App() {
   }
 
   useEffect(() => {
-    console.log(JSON.parse(localStorage.getItem("chitchatuser")),"user");
     setUser(JSON.parse(localStorage.getItem("chitchatuser")));
   }, []);
 

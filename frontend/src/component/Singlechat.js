@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from "react";
-// import { useParams } from "react-router";
 import { useLocation } from "react-router-dom";
 import {
   MessageInput,
@@ -24,7 +23,6 @@ function Singlechat() {
   const [newMessage, setnewMessage] = useState();
   const [messages, setMessages] = useState("");
   const [socketConnected, setsocketConnected] = useState(false);
-  // const user = JSON.parse(localStorage.getItem("chitchatuser"));
   const { user } = useContext(chatcontext);
 
   // socket.io
@@ -37,6 +35,7 @@ function Singlechat() {
 
   useEffect(() => {
     socket = io(ENDPOINT);
+    // console.log(user,"user");
     socket.emit("setup", user);
     socket.on("connection", () => setsocketConnected(true));
   }, []);
@@ -55,20 +54,17 @@ function Singlechat() {
         `http://localhost:5000/api/message/${User._id}`,
         config
       );
-      console.log(data,"data");
       setMessages(data);
+      // console.log(User._id); 
       socket.emit('join chat',User._id);
     } catch (error) {
-      console.log(error);
       alert("failed to load the message");
     }
   };
 
   const sendMessage = async (event) => {
-    // console.log(event);
     if (event.key === "Enter" && newMessage) {
       event.preventDefault();
-      // console.log("enter");
       try {
         const config = {
           headers: {
@@ -85,8 +81,6 @@ function Singlechat() {
           config
         );
         setnewMessage("");
-        // console.log(data.data);
-        console.log(User?._id);
         setMessages([...messages, data.data]);
       } catch (error) {
         alert("error occured");
@@ -129,7 +123,7 @@ function Singlechat() {
           <MessageList
           // typingIndicator={<TypingIndicator content="is typing" />}
           >
-            {messages?.map((msg, i) => {
+            {messages.length && messages?.map((msg, i) => {
               return (
                 <Message
                   model={{
@@ -137,36 +131,18 @@ function Singlechat() {
                     sentTime: "15 mins ago",
                     sender: msg.sender.name,
                     direction:
-                      msg.sender.name == User.name ? "incoming" : "outgoing",
+                      msg.sender.name === user.name ?  "outgoing":"incoming",
                     position: msg,
                   }}
                 >
                   <Avatar
-                    src={
-                      User?.chatName === "sender"
-                        ? user._id === User?.users[0]._id
-                          ? User?.users[0].pic
-                          : User?.users[1].pic
-                        : User?.sender.pic
-                    }
+                    src={ msg.sender.pic}
                     name={User?.name}
                   />
                 </Message>
               );
             })}
             {/* <MessageSeparator content="Saturday, 30 November 2019" /> */}
-
-            {/* <Message
-              model={{
-                message: "Hello my friend",
-                sentTime: "15 mins ago",
-                sender: "Emily",
-                direction: "outgoing",
-                position: "last",
-              }}
-            >
-              <Avatar src={user.pic} name={User?.name} />
-            </Message> */}
           </MessageList>
           {/* <MessageInput
             placeholder="Type message here"
