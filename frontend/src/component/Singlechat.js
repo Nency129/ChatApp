@@ -28,17 +28,29 @@ function Singlechat() {
   // socket.io
   const ENDPOINT = "http://localhost:5000";
   var socket, selectedChatComapre;
+  
+  socket = io(ENDPOINT);
+  socket.emit("setup", user);
+  useEffect(() => {
+    socket.on("connect", () => setsocketConnected(true));
+  }, []);
 
   useEffect(() => {
     fetchMessages();
+    selectedChatComapre=User;
   }, [User]);
 
-  useEffect(() => {
-    socket = io(ENDPOINT);
-    // console.log(user,"user");
-    socket.emit("setup", user);
-    socket.on("connection", () => setsocketConnected(true));
-  }, []);
+  useEffect(()=>{
+    socket.on('message recieved',(newMessageRecieved)=>{
+      if(!selectedChatComapre || selectedChatComapre._id!==newMessageRecieved.chat._id){
+        // notification
+      }else{
+        setMessages([...messages,newMessageRecieved]);
+      }
+    });
+  })
+
+
 
   const fetchMessages = async () => {
     if (!User) return;
@@ -58,7 +70,7 @@ function Singlechat() {
       // console.log(User._id); 
       socket.emit('join chat',User._id);
     } catch (error) {
-      alert("failed to load the message");
+      console.log(error);
     }
   };
 
@@ -81,6 +93,7 @@ function Singlechat() {
           config
         );
         setnewMessage("");
+        socket.emit("new message",data);
         setMessages([...messages, data.data]);
       } catch (error) {
         alert("error occured");

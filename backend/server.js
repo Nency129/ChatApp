@@ -17,7 +17,7 @@ app.use(cors({ origin: true }));
 app.use(express.json());
 // if the path is unknown
 app.use((req, res, next) => {
-  console.log(req.path, req.method);
+  // console.log(req.path, req.method);
   res.setHeader("Access-Control-Allow-Origin", "*");
   next();
 });
@@ -41,10 +41,8 @@ const io = require("socket.io")(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log("connected to socket.io");
-
+  console.log("Connected to socket.io");
   socket.on("setup", (userData) => {
-    // console.log(userData._id);
     socket.join(userData._id);
     socket.emit("connected");
   });
@@ -52,5 +50,18 @@ io.on("connection", (socket) => {
   socket.on("join chat", (room) => {
     socket.join(room);
     console.log("User Joined room:" + room);
+  });
+
+  socket.on("new message", (newMessageRecieved) => {
+    var chat = newMessageRecieved?.chat;
+    console.log(chat,"chat");
+
+    if (!chat?.users) return console.log("chat.users not defined");
+
+    chat?.users.forEach((user) => {
+      if (user._id == newMessageRecieved?.sender._id) return;
+
+      socket.in(user._id).emit("message recieved", newMessageRecieved);
+    });
   });
 });
