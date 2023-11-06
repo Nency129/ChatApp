@@ -21,36 +21,36 @@ function Singlechat() {
   const location = useLocation();
   const User = location.state?.convo;
   const [newMessage, setnewMessage] = useState();
-  const [messages, setMessages] = useState("");
+  const [messages, setMessages] = useState([]);
   const [socketConnected, setsocketConnected] = useState(false);
   const { user } = useContext(chatcontext);
 
   // socket.io
   const ENDPOINT = "http://localhost:5000";
   var socket, selectedChatComapre;
-  
   socket = io(ENDPOINT);
   socket.emit("setup", user);
   useEffect(() => {
-    socket.on("connect", () => setsocketConnected(true));
-  }, []);
+    socket.on("connected", () => setsocketConnected(true));
+  }, [user]);
 
   useEffect(() => {
     fetchMessages();
-    selectedChatComapre=User;
-  }, [User]);
+    selectedChatComapre = User;
+  }, [User,socket]);
 
-  useEffect(()=>{
-    socket.on('message recieved',(newMessageRecieved)=>{
-      if(!selectedChatComapre || selectedChatComapre._id!==newMessageRecieved.chat._id){
+  useEffect(() => {
+    socket.on("message recieved", (newMessageRecieved) => {
+      if (
+        !selectedChatComapre ||
+        selectedChatComapre._id !== newMessageRecieved.chat._id
+      ) {
         // notification
-      }else{
-        setMessages([...messages,newMessageRecieved]);
+      } else {
+        setMessages([...messages, newMessageRecieved]);
       }
     });
-  })
-
-
+  },[socket]);
 
   const fetchMessages = async () => {
     if (!User) return;
@@ -67,8 +67,8 @@ function Singlechat() {
         config
       );
       setMessages(data);
-      // console.log(User._id); 
-      socket.emit('join chat',User._id);
+      // console.log(User._id);
+      socket.emit("join chat", User._id);
     } catch (error) {
       console.log(error);
     }
@@ -93,7 +93,7 @@ function Singlechat() {
           config
         );
         setnewMessage("");
-        socket.emit("new message",data);
+        socket.emit("new message", data);
         setMessages([...messages, data.data]);
       } catch (error) {
         alert("error occured");
@@ -136,25 +136,23 @@ function Singlechat() {
           <MessageList
           // typingIndicator={<TypingIndicator content="is typing" />}
           >
-            {messages.length && messages?.map((msg, i) => {
-              return (
-                <Message
-                  model={{
-                    message: msg.content,
-                    sentTime: "15 mins ago",
-                    sender: msg.sender.name,
-                    direction:
-                      msg.sender.name === user.name ?  "outgoing":"incoming",
-                    position: msg,
-                  }}
-                >
-                  <Avatar
-                    src={ msg.sender.pic}
-                    name={User?.name}
-                  />
-                </Message>
-              );
-            })}
+            {messages.length &&
+              messages?.map((msg, i) => {
+                return (
+                  <Message
+                    model={{
+                      message: msg.content,
+                      sentTime: "15 mins ago",
+                      sender: msg.sender.name,
+                      direction:
+                        msg.sender.name === user.name ? "outgoing" : "incoming",
+                      position: msg,
+                    }}
+                  >
+                    <Avatar src={msg.sender.pic} name={User?.name} />
+                  </Message>
+                );
+              })}
             {/* <MessageSeparator content="Saturday, 30 November 2019" /> */}
           </MessageList>
           {/* <MessageInput
